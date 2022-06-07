@@ -4,6 +4,13 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
+      - name: Tailscale
+        uses: tailscale/github-action@v1
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+      - name: show network
+        run: |
+          ip a
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Add file to the workspace

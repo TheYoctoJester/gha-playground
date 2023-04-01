@@ -1,29 +1,13 @@
 name: GitHub Actions Demo
 on: [push]
+
+env:
+  FOO: foo
+  BAR: bar
+  FOOBAR: ${{ env.FOO }}${{ env.BAR }}
+
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - name: Tailscale
-        uses: tailscale/github-action@v1
-        with:
-          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-      - name: show network
-        run: |
-          ip a
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: Add file to the workspace
-        run: |
-          touch ${{ github.workspace }}/outside
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: Run packaged action
-        uses: ./
-        # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - run: echo "FOO is ${{ env.FOO }}, BAR is ${{ env.BAR }}, FOOBAR is ${{ env.FOOBAR }}."

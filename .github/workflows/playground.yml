@@ -4,7 +4,7 @@ on: [push]
 env:
   FOO: foo
   BAR: bar
-  FOOBAR: ${{ env.FOO }}${{ env.BAR }}
+  FOOBAR: $FOO$BAR
 
 jobs:
   Explore-GitHub-Actions:

@@ -2,7 +2,7 @@ name: GitHub Actions Dependency
 
 on:
   workflow_run:
-    workflows: [playground]
+    workflows: ["GitHub Actions Demo"]
     types: 
     - completed
 

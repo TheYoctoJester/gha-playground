@@ -1,0 +1,14 @@
+name: GitHub Actions Dependency
+
+on:
+  workflow_run:
+    workflows: [playground]
+    types: 
+    - completed
+
+jobs:
+  GitHub-Actions-Dependency:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "ran the dependency!"
+      

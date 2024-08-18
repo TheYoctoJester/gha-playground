@@ -1,0 +1,22 @@
+name: 'variables' 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  use-variables:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: create timestamp
+        run: echo "FETCH_TIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: create artifact
+        run: echo "$FETCH_TIME" >> test.txt
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GH-community-data-$FETCH_TIME
+          path: test.txt

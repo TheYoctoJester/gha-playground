@@ -14,7 +14,7 @@ jobs:
           echo "ARTIFACT_DIR: $ARTIFACT_DIR" &&
           echo "ARTIFACT_OUTPUT_DIR: $ARTIFACT_OUTPUT_DIR" &&
           echo "GITHUB_JOB: $GITHUB_JOB" &&
-          echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER" &&
+          echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
       - name: create artifact output directory - try a
         run: mkdir -p $ARTIFACT_DIR
       - name: create artifact output directory - try b

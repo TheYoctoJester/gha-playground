@@ -17,7 +17,7 @@ jobs:
           echo "GITHUB_JOB: $GITHUB_JOB" &&
           echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
       - name: create full path
-        run: echo "ARTIFACT_DIR=$ARTIFACT_OUTPUT_DIR/$GITHUB_JOB/$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+        run: echo "ARTIFACT_DIR=${{ vars.ARTIFACT_OUTPUT_DIR }}/$GITHUB_JOB/$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
       - name: show things again
         run: >
           echo "ARTIFACT_DIR: $ARTIFACT_DIR" &&

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
 env:
-  ARTIFACT_DIR: $ARTIFACT_OUTPUT_DIR/${{ env.github_job }}/${{ env.github_run_number }}
+  ARTIFACT_DIR: $ARTIFACT_OUTPUT_DIR/a/$GITHUB_JOB/$GITHUB_RUN_NUMBER
 
 jobs:
   things:

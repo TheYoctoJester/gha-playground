@@ -12,7 +12,17 @@ jobs:
       - name: show things
         run: >
           echo "ARTIFACT_DIR: $ARTIFACT_DIR" &&
-          echo "vars.ARTIFACT_OUTPUT_DIR: $${{ vars.ARTIFACT_OUTPUT_DIR }}" &&
+          echo "vars.ARTIFACT_OUTPUT_DIR: ${{ vars.ARTIFACT_OUTPUT_DIR }}" &&
+          echo "ARTIFACT_OUTPUT_DIR: $ARTIFACT_OUTPUT_DIR" &&
+          echo "GITHUB_JOB: $GITHUB_JOB" &&
+          echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
+      - name: create full path
+        run: echo "ARTIFACT_DIR=$ARTIFACT_OUTPUT_DIR/$GITHUB_JOB/$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+      - name: show things again
+        run: >
+          echo "ARTIFACT_DIR: $ARTIFACT_DIR" &&
+          echo "vars.ARTIFACT_OUTPUT_DIR: ${{ vars.ARTIFACT_OUTPUT_DIR }}" &&
+          echo "env.ARTIFACT_DIR: ${{ env.ARTIFACT_DIR }}" &&
           echo "ARTIFACT_OUTPUT_DIR: $ARTIFACT_OUTPUT_DIR" &&
           echo "GITHUB_JOB: $GITHUB_JOB" &&
           echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"

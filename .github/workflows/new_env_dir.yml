@@ -12,7 +12,7 @@ jobs:
       - name: show things
         run: >
           echo "vars.ARTIFACT_OUTPUT_DIR: ${{ vars.ARTIFACT_OUTPUT_DIR }}" &&
-          echo "env.ARTIFACT_DIR: ${{ env.ARTIFACT_DIR }}" && &&
+          echo "env.ARTIFACT_DIR: ${{ env.ARTIFACT_DIR }}" &&
           echo "ARTIFACT_DIR: $ARTIFACT_DIR" &&
           echo "GITHUB_JOB: $GITHUB_JOB" &&
           echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
@@ -23,7 +23,7 @@ jobs:
       - name: show things again
         run: >
           echo "vars.ARTIFACT_OUTPUT_DIR: ${{ vars.ARTIFACT_OUTPUT_DIR }}" &&
-          echo "env.ARTIFACT_DIR: ${{ env.ARTIFACT_DIR }}" && &&
+          echo "env.ARTIFACT_DIR: ${{ env.ARTIFACT_DIR }}" &&
           echo "ARTIFACT_DIR: $ARTIFACT_DIR" &&
           echo "GITHUB_JOB: $GITHUB_JOB" &&
           echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"

@@ -9,6 +9,11 @@ jobs:
     steps:
       - name: create full path
         run: echo "ARTIFACT_DIR=${{ vars.ARTIFACT_OUTPUT_DIR }}/$GITHUB_JOB/$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+      - name: show things
+        run: >
+          echo "vars.ARTIFACT_OUTPUT_DIR: ${{ vars.ARTIFACT_OUTPUT_DIR }}" &&
+          echo "GITHUB_JOB: $GITHUB_JOB" &&
+          echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
   things:
     runs-on: ubuntu-latest
     needs: [prepare]

@@ -10,7 +10,7 @@ jobs:
       artifact_dir: ${{ steps.create_path.outputs.artifact_dir }}
     steps:
       - name: create_path
-        run: echo "artifact_dir=${{ vars.ARTIFACT_OUTPUT_DIR }}/$GITHUB_REPOSITORY_OWNER/$GITHUB_WORKFLOW/$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+        run: echo "artifact_dir=${{ vars.ARTIFACT_OUTPUT_DIR }}/$GITHUB_REPOSITORY_OWNER/$GITHUB_WORKFLOW/$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
 
   things:
     runs-on: ubuntu-latest

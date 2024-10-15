@@ -2,8 +2,6 @@ name: build boards
 
 on:
   workflow_dispatch:
-env:
-  ARTIFACT_DIR: $ARTIFACT_OUTPUT_DIR/a/$GITHUB_JOB/$GITHUB_RUN_NUMBER
 
 jobs:
   prepare:
@@ -17,10 +15,7 @@ jobs:
     steps:
       - name: show things again
         run: >
-          echo "ARTIFACT_DIR: $ARTIFACT_DIR" &&
           echo "vars.ARTIFACT_OUTPUT_DIR: ${{ vars.ARTIFACT_OUTPUT_DIR }}" &&
-          echo "env.ARTIFACT_DIR: ${{ env.ARTIFACT_DIR }}" &&
-          echo "ARTIFACT_OUTPUT_DIR: $ARTIFACT_OUTPUT_DIR" &&
           echo "GITHUB_JOB: $GITHUB_JOB" &&
           echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
       - name: create artifact output directory

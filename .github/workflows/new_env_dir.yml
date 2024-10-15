@@ -1,0 +1,18 @@
+name: build boards
+
+on:
+  workflow_dispatch:
+  push:
+env:
+  ARTIFACT_DIR: $ARTIFACT_OUTPUT_DIR/${{ env.github_job }}/${{ env.github_run_number }}
+
+jobs:
+  things:
+    runs-on: ubuntu-latest
+    steps:
+      - name: create artifact output directory - try a
+        run: mkdir -p $ARTIFACT_DIR
+      - name: create artifact output directory - try b
+        run: mkdir -p $ARTIFACT_OUTPUT_DIR/a/$GITHUB_JOB/$GITHUB_RUN_NUMBER
+      - name: eval
+        run: tree

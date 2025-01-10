@@ -21,7 +21,7 @@ jobs:
           RESULT_1: ${{ needs.result_1.outputs.result }}
         run: >
           result=1; \
-          if [ "$RESULT_1" == "success" ]; then \
+          if [ "$RESULT_1" = "success" ]; then \
             result=0; \
           fi \
           exit $result

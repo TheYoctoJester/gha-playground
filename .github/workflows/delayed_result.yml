@@ -20,6 +20,7 @@ jobs:
         env:
           RESULT_1: ${{ needs.result_1.outputs.result }}
         run: >
+          echo "RESULT_1 = $RESULT_1"
           if [ "$RESULT_1 " = "success" ]; then
             exit 0;
           else

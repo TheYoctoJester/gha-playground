@@ -10,7 +10,7 @@ jobs:
       result: ${{ steps.generate_result.outputs.result }}
     steps:
     - id: generate_result
-      run: echo "result=fail" >> $GITHUB_OUTPUT
+      run: echo "result=success" >> $GITHUB_OUTPUT
 
   result_2:
     runs-on: ubuntu-latest
@@ -18,7 +18,7 @@ jobs:
       result: ${{ steps.generate_result.outputs.result }}
     steps:
     - id: generate_result
-      run: echo "result=success" >> $GITHUB_OUTPUT
+      run: echo "result=fail" >> $GITHUB_OUTPUT
 
   evaluate:
     needs: [result_1, result_2]

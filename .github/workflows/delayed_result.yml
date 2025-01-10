@@ -12,17 +12,25 @@ jobs:
     - id: generate_result
       run: echo "result=success" >> $GITHUB_OUTPUT
 
+  result_2:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.generate_result.outputs.result }}
+    steps:
+    - id: generate_result
+      run: echo "result=success" >> $GITHUB_OUTPUT
+
   evaluate:
-    needs: [result_1]
+    needs: [result_1, result_2]
     runs-on: ubuntu-latest
     steps:
       - name: collect artifacts
         env:
           RESULT_1: ${{ needs.result_1.outputs.result }}
+          RESULT_2: ${{ needs.result_2.outputs.result }}
         run: >
           echo "RESULT_1 = $RESULT_1";
-          if [ "$RESULT_1" = "success" ]; then
-            exit 0;
-          else
-            exit 1;
+          echo "RESULT_2 = $RESULT_2";
+          if [ "$RESULT_1" != "success" ] || [ "$RESULT_2" != "success" ]; then
+            exit 1
           fi

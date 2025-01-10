@@ -1,0 +1,27 @@
+name: 'delayed_result' 
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  result_1:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.generate_result.outputs.result }}
+    steps:
+    - id: generate_result
+      run: echo "result=success" >> $GITHUB_OUTPUT
+
+  evaluate:
+    needs: [result_1]
+    runs-on: ubuntu-latest
+    steps:
+      - name: collect artifacts
+        env:
+          RESULT_1: ${{ needs.result_1.outputs.result }}
+        run: >
+          result=1 \
+          if [ "$RESULT_1" == "success" ]; then \
+            result=0; \
+          fi \
+          exit $result

@@ -26,7 +26,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y mender-artifact
-          mender-artifact --version
 
   generate_artifact:
     runs-on: ubuntu-latest
@@ -65,9 +64,7 @@ jobs:
       - name: Verify artifact was created
         env:
           ARTIFACT_NAME: ${{ needs.setup.outputs.artifact_name }}
-        run: |
-          ls -lh ${ARTIFACT_NAME}.mender
-          mender-artifact read ${ARTIFACT_NAME}.mender
+        run: mender-artifact read ${ARTIFACT_NAME}.mender
 
       - name: Upload artifact to GitHub
         uses: actions/upload-artifact@v4
@@ -99,10 +96,7 @@ jobs:
       - name: Validate downloaded artifact
         env:
           ARTIFACT_NAME: ${{ needs.setup.outputs.artifact_name }}
-        run: |
-          echo "Validating artifact: ${ARTIFACT_NAME}.mender"
-          mender-artifact validate ${ARTIFACT_NAME}.mender
-          echo "Artifact validation successful!"
+        run: mender-artifact validate ${ARTIFACT_NAME}.mender
 
   cleanup:
     runs-on: ubuntu-latest
@@ -115,11 +109,9 @@ jobs:
           ARTIFACT_NAME: ${{ needs.setup.outputs.artifact_name }}
           MENDER_PAT: ${{ secrets.MENDER_PAT }}
         run: |
-          echo "Looking up artifact ID for: ${ARTIFACT_NAME}"
           ARTIFACT_ID=$(curl -s -H "Authorization: Bearer ${MENDER_PAT}" \
             "https://hosted.mender.io/api/management/v1/deployments/artifacts" \
             | jq -r ".[] | select(.name == \"${ARTIFACT_NAME}\") | .id")
-          echo "Found artifact ID: ${ARTIFACT_ID}"
           echo "artifact_id=${ARTIFACT_ID}" >> $GITHUB_OUTPUT
 
       - name: Delete artifact from Mender
@@ -128,8 +120,6 @@ jobs:
           ARTIFACT_ID: ${{ steps.get_artifact_id.outputs.artifact_id }}
           MENDER_PAT: ${{ secrets.MENDER_PAT }}
         run: |
-          echo "Deleting artifact ID: ${ARTIFACT_ID}"
-          curl -v -X DELETE \
+          curl -X DELETE \
             -H "Authorization: Bearer ${MENDER_PAT}" \
             "https://hosted.mender.io/api/management/v1/deployments/artifacts/${ARTIFACT_ID}"
-          echo "Artifact deletion completed"

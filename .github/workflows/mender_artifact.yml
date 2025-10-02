@@ -76,7 +76,7 @@ jobs:
           path: ${{ needs.setup.outputs.artifact_name }}.mender
 
       - name: Upload artifact to Mender
-        uses: mendersoftware/mender-gh-action-upload-artifact@v1
+        uses: mendersoftware/mender-gh-action-upload-artifact@v1.0.0
         with:
           mender_pat: ${{ secrets.MENDER_PAT }}
           mender_artifact: ${{ needs.setup.outputs.artifact_name }}.mender

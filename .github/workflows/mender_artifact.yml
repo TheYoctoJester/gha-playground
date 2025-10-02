@@ -98,9 +98,70 @@ jobs:
           ARTIFACT_NAME: ${{ needs.setup.outputs.artifact_name }}
         run: mender-artifact validate ${ARTIFACT_NAME}.mender
 
-  cleanup:
+  deploy_by_device_list:
     runs-on: ubuntu-latest
     needs: [setup, validate]
+    steps:
+      - name: Get device IDs
+        id: get_devices
+        env:
+          MENDER_PAT: ${{ secrets.MENDER_PAT }}
+        run: |
+          DEVICE_IDS=$(curl -s -H "Authorization: Bearer ${MENDER_PAT}" \
+            "https://hosted.mender.io/api/management/v2/devauth/devices?status=accepted" \
+            | jq -r '[.[].id] | join(",")')
+          echo "device_ids=${DEVICE_IDS}" >> $GITHUB_OUTPUT
+
+      - name: Create deployment by device list
+        if: steps.get_devices.outputs.device_ids != ''
+        uses: mendersoftware/mender-gh-action-create-deployment@master
+        with:
+          mender_pat: ${{ secrets.MENDER_PAT }}
+          mender_deployment_name: deploy-by-list-${{ github.run_number }}
+          mender_release_name: ${{ needs.setup.outputs.artifact_name }}
+          mender_devices_list: ${{ steps.get_devices.outputs.device_ids }}
+          mender_uri: hosted.mender.io
+
+  deploy_by_device_group:
+    runs-on: ubuntu-latest
+    needs: [setup, validate]
+    steps:
+      - name: Get device group
+        id: get_group
+        env:
+          MENDER_PAT: ${{ secrets.MENDER_PAT }}
+        run: |
+          GROUP_NAME=$(curl -s -H "Authorization: Bearer ${MENDER_PAT}" \
+            "https://hosted.mender.io/api/management/v1/inventory/groups" \
+            | jq -r '.[0]')
+          echo "group_name=${GROUP_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Create deployment by device group
+        if: steps.get_group.outputs.group_name != 'null' && steps.get_group.outputs.group_name != ''
+        uses: mendersoftware/mender-gh-action-create-deployment@master
+        with:
+          mender_pat: ${{ secrets.MENDER_PAT }}
+          mender_deployment_name: deploy-by-group-${{ github.run_number }}
+          mender_release_name: ${{ needs.setup.outputs.artifact_name }}
+          mender_devices_group: ${{ steps.get_group.outputs.group_name }}
+          mender_uri: hosted.mender.io
+
+  deploy_by_device_attributes:
+    runs-on: ubuntu-latest
+    needs: [setup, validate]
+    steps:
+      - name: Create deployment by device attributes
+        uses: mendersoftware/mender-gh-action-create-deployment@master
+        with:
+          mender_pat: ${{ secrets.MENDER_PAT }}
+          mender_deployment_name: deploy-by-attributes-${{ github.run_number }}
+          mender_release_name: ${{ needs.setup.outputs.artifact_name }}
+          mender_device_attributes: device_type=test-device
+          mender_uri: hosted.mender.io
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: [setup, deploy_by_device_list, deploy_by_device_group, deploy_by_device_attributes]
     if: always()
     steps:
       - name: Get artifact ID

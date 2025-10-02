@@ -69,11 +69,18 @@ jobs:
           ls -lh ${ARTIFACT_NAME}.mender
           mender-artifact read ${ARTIFACT_NAME}.mender
 
-      - name: Upload artifact
+      - name: Upload artifact to GitHub
         uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.setup.outputs.artifact_name }}
           path: ${{ needs.setup.outputs.artifact_name }}.mender
+
+      - name: Upload artifact to Mender
+        uses: mendersoftware/mender-gh-action-upload-artifact@v1
+        with:
+          mender_pat: ${{ secrets.MENDER_PAT }}
+          mender_artifact: ${{ needs.setup.outputs.artifact_name }}.mender
+          mender_uri: hosted.mender.io
 
   validate:
     runs-on: ubuntu-latest

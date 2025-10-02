@@ -156,7 +156,7 @@ jobs:
           mender_pat: ${{ secrets.MENDER_PAT }}
           mender_deployment_name: deploy-by-attributes-${{ github.run_number }}
           mender_release_name: ${{ needs.setup.outputs.artifact_name }}
-          mender_device_attributes: device_type=test-device
+          mender_device_attributes: testkey=testvalue
           mender_uri: hosted.mender.io
 
   cleanup:

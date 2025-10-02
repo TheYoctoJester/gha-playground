@@ -113,6 +113,7 @@ jobs:
           echo "device_ids=${DEVICE_IDS}" >> $GITHUB_OUTPUT
 
       - name: Create deployment by device list
+        id: create_deployment_list
         if: steps.get_devices.outputs.device_ids != ''
         uses: pkgl/mender-gh-action-create-deployment@feat/deployment-to-attributes
         with:
@@ -121,6 +122,19 @@ jobs:
           mender_release_name: ${{ needs.setup.outputs.artifact_name }}
           mender_devices_list: ${{ steps.get_devices.outputs.device_ids }}
           mender_uri: hosted.mender.io
+
+      - name: Wait and abort deployment
+        if: steps.create_deployment_list.outputs.deployment_id != ''
+        env:
+          DEPLOYMENT_ID: ${{ steps.create_deployment_list.outputs.deployment_id }}
+          MENDER_PAT: ${{ secrets.MENDER_PAT }}
+        run: |
+          sleep 30
+          curl -X PUT \
+            -H "Authorization: Bearer ${MENDER_PAT}" \
+            -H "Content-Type: application/json" \
+            -d '{"status":"aborted"}' \
+            "https://hosted.mender.io/api/management/v1/deployments/deployments/${DEPLOYMENT_ID}/status"
 
   deploy_by_device_group:
     runs-on: ubuntu-latest
@@ -137,6 +151,7 @@ jobs:
           echo "group_name=${GROUP_NAME}" >> $GITHUB_OUTPUT
 
       - name: Create deployment by device group
+        id: create_deployment_group
         if: steps.get_group.outputs.group_name != 'null' && steps.get_group.outputs.group_name != ''
         uses: pkgl/mender-gh-action-create-deployment@feat/deployment-to-attributes
         with:
@@ -146,11 +161,25 @@ jobs:
           mender_devices_group: ${{ steps.get_group.outputs.group_name }}
           mender_uri: hosted.mender.io
 
+      - name: Wait and abort deployment
+        if: steps.create_deployment_group.outputs.deployment_id != ''
+        env:
+          DEPLOYMENT_ID: ${{ steps.create_deployment_group.outputs.deployment_id }}
+          MENDER_PAT: ${{ secrets.MENDER_PAT }}
+        run: |
+          sleep 30
+          curl -X PUT \
+            -H "Authorization: Bearer ${MENDER_PAT}" \
+            -H "Content-Type: application/json" \
+            -d '{"status":"aborted"}' \
+            "https://hosted.mender.io/api/management/v1/deployments/deployments/${DEPLOYMENT_ID}/status"
+
   deploy_by_device_attributes:
     runs-on: ubuntu-latest
     needs: [setup, validate]
     steps:
       - name: Create deployment by device attributes
+        id: create_deployment_attributes
         uses: pkgl/mender-gh-action-create-deployment@feat/deployment-to-attributes
         with:
           mender_pat: ${{ secrets.MENDER_PAT }}
@@ -158,6 +187,19 @@ jobs:
           mender_release_name: ${{ needs.setup.outputs.artifact_name }}
           mender_device_attributes: testkey=testvalue
           mender_uri: hosted.mender.io
+
+      - name: Wait and abort deployment
+        if: steps.create_deployment_attributes.outputs.deployment_id != ''
+        env:
+          DEPLOYMENT_ID: ${{ steps.create_deployment_attributes.outputs.deployment_id }}
+          MENDER_PAT: ${{ secrets.MENDER_PAT }}
+        run: |
+          sleep 30
+          curl -X PUT \
+            -H "Authorization: Bearer ${MENDER_PAT}" \
+            -H "Content-Type: application/json" \
+            -d '{"status":"aborted"}' \
+            "https://hosted.mender.io/api/management/v1/deployments/deployments/${DEPLOYMENT_ID}/status"
 
   cleanup:
     runs-on: ubuntu-latest

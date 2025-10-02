@@ -115,8 +115,9 @@ jobs:
           MENDER_PAT: ${{ secrets.MENDER_PAT }}
         run: |
           echo "Deleting release: ${ARTIFACT_NAME}"
-          curl -X DELETE \
+          curl -v -X DELETE \
             -H "Authorization: Bearer ${MENDER_PAT}" \
             -H "Content-Type: application/json" \
-            "https://hosted.mender.io/api/management/v2/deployments/releases?name=${ARTIFACT_NAME}"
+            -d "[\"${ARTIFACT_NAME}\"]" \
+            "https://hosted.mender.io/api/management/v2/deployments/releases"
           echo "Release deletion completed"

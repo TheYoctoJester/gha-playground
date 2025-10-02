@@ -23,12 +23,9 @@ jobs:
     needs: [setup]
     steps:
       - name: Install mender-artifact
-        env:
-          MENDER_VERSION: ${{ needs.setup.outputs.mender_version }}
         run: |
-          wget https://downloads.mender.io/mender-artifact/${MENDER_VERSION}/linux/mender-artifact
-          chmod +x mender-artifact
-          sudo mv mender-artifact /usr/local/bin/
+          sudo apt-get update
+          sudo apt-get install -y mender-artifact
           mender-artifact --version
 
   generate_artifact:
@@ -41,12 +38,9 @@ jobs:
           chmod +x single-file-artifact-gen
 
       - name: Install mender-artifact
-        env:
-          MENDER_VERSION: ${{ needs.setup.outputs.mender_version }}
         run: |
-          wget https://downloads.mender.io/mender-artifact/${MENDER_VERSION}/linux/mender-artifact
-          chmod +x mender-artifact
-          sudo mv mender-artifact /usr/local/bin/
+          sudo apt-get update
+          sudo apt-get install -y mender-artifact
 
       - name: Create test payload file
         run: |
@@ -91,12 +85,9 @@ jobs:
           name: ${{ needs.setup.outputs.artifact_name }}
 
       - name: Install mender-artifact for validation
-        env:
-          MENDER_VERSION: ${{ needs.setup.outputs.mender_version }}
         run: |
-          wget https://downloads.mender.io/mender-artifact/${MENDER_VERSION}/linux/mender-artifact
-          chmod +x mender-artifact
-          sudo mv mender-artifact /usr/local/bin/
+          sudo apt-get update
+          sudo apt-get install -y mender-artifact
 
       - name: Validate downloaded artifact
         env:

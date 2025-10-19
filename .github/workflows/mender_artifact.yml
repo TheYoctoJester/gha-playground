@@ -115,7 +115,7 @@ jobs:
       - name: Create deployment by device list
         id: create_deployment_list
         if: steps.get_devices.outputs.device_ids != ''
-        uses: pkgl/mender-gh-action-create-deployment@feat/deployment-to-attributes
+        uses: mendersoftware/mender-gh-action-create-deployment@ci-fix
         with:
           mender_pat: ${{ secrets.MENDER_PAT }}
           mender_deployment_name: deploy-by-list-${{ github.run_number }}
@@ -153,7 +153,7 @@ jobs:
       - name: Create deployment by device group
         id: create_deployment_group
         if: steps.get_group.outputs.group_name != 'null' && steps.get_group.outputs.group_name != ''
-        uses: pkgl/mender-gh-action-create-deployment@feat/deployment-to-attributes
+        uses: mendersoftware/mender-gh-action-create-deployment@ci-fix
         with:
           mender_pat: ${{ secrets.MENDER_PAT }}
           mender_deployment_name: deploy-by-group-${{ github.run_number }}
@@ -180,7 +180,7 @@ jobs:
     steps:
       - name: Create deployment by device attributes
         id: create_deployment_attributes
-        uses: pkgl/mender-gh-action-create-deployment@feat/deployment-to-attributes
+        uses: mendersoftware/mender-gh-action-create-deployment@ci-fix
         with:
           mender_pat: ${{ secrets.MENDER_PAT }}
           mender_deployment_name: deploy-by-attributes-${{ github.run_number }}
